@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+<style type="text/css">
+
+* {
+ margin: 0;
+ padding: 0;
+}
+#button{
+color:green;
+height:20px;
+width:60px;
+align:center;
+}
+
+body {
+ font-family: futura;
+ background-color:lightgray;
+}
+h3 {
+ text-align: center;
+ color:#FF5050;
+}
+
+#main
+{
+
+width:400px;
+height:400px;
+margin-left:auto;
+margin-right:auto;
+background-color:#009999;
+border:1px solid #009999;
+border-radius:10px;
+}
+
+
+
+ul {
+ width: 300px;
+ height:300px;
+ margin: 0 auto;
+ padding: 0;
+}
+
+ul li {
+align:center;
+margin:0px;
+ float: left;
+ width: 70px;
+ height:70px;
+ border: 1px solid #444;
+ list-style: none;
+ padding: 20px 0;
+ margin: 0 5px 5px 0;
+ text-align: center;
+ text:disabled;
+ color: white;
+ border-radius: 1em;
+ background-color:white;
+ 
+}
+ul li:hover {
+ border: 1px solid red;
+}
+
+
+.red{
+ background-color:red;
+ color:red;
+  -moz-transition: all 1s ease-in;
+  -webkit-transition: all 1s ease-in;
+
+}
+.blue{
+background-color:blue;
+color:blue;
+-moz-transition: all 1s ease-in;
+-webkit-transition: all 1s ease-in;
+}
+.green{
+background-color:green;
+color:green;
+-moz-transition: all 1s ease-in;
+-webkit-transition: all 1s ease-in;
+}
+
+.orange{
+background-color:orange;
+color:orange;
+-moz-transition: all 1s ease-in;
+-webkit-transition: all 1s ease-in;
+}
+
+#reset1{
+border-radius:5px;
+}
+
+
+
+
+.disabled{
+    pointer-events:none;
+    opacity:0.7;
+}
+
+
+</style>
+
+<script type="text/javascript" src="js/jquery-1.8.0.min.js"></script>		
+
+<script type="text/javascript" language="javascript">
+
+
+
+$(function() {
+
+function blink(selector){
+$(selector).fadeOut('veryslow', function(){
+    $(this).fadeIn('slow', function(){
+        blink(this);
+    });
+});
+}
+
+blink('#h3');
+
+Array.prototype.shuffle=function(){
+var tmp, rand;
+  for(var i =0; i < this.length; i++){
+    rand = Math.floor(Math.random() * this.length);
+    tmp = this[i]; 
+    this[i] = this[rand]; 
+    this[rand] = tmp;
+  }
+}
+
+var k=1;
+	
+function createlist(){
+	if(k==1)
+	{
+		var color_array=['red','orange','green','blue','red','orange','green','blue','red','orange','green','blue','red','orange','green','blue'];
+		color_array.shuffle();  // for getting different values 
+		var str='';
+		for(var i=0;i<color_array.length;i++)
+			{
+				str+='<li id=\''+color_array[i]+'\' name=\''+i+'\'>'+'</li>';
+			}
+		$('#ul').append(str);
+	}
+}
+
+createlist(k);
+k++;
+		
+var firstCard = null;
+var score="";
+
+$('li').on('click', function() {
+
+	var count = parseInt($("#numOfClicks").attr("value")) + 1;
+	
+	$("#numOfClicks").val(count);
+	 $(this).addClass('flipped');
+	  $(this).addClass($(this).attr("id"));
+		
+		if (firstCard === null) 
+		{
+		   firstCard = $(this);
+		} 
+		
+		else {
+			if (firstCard.attr("id") === $(this).attr("id")&&firstCard.attr("name")!=$(this).attr("name")) 
+			{
+				firstCard.addClass('disabled');
+				$(this).addClass('disabled');
+				score=parseInt($("#score").attr("value")) + 10;
+				$("#score").val(score);
+				firstCard = null;
+			} 
+		
+			else {
+					var secondCard = this;
+						if(firstCard.attr("name")!=$(secondCard).attr("name"))
+						{
+							score=parseInt($("#score").attr("value")) - 10;
+							$("#score").val(score);
+						}
+					setTimeout(function() {	
+						firstCard.removeClass(firstCard.attr("id"));
+						$(secondCard).removeClass($(secondCard).attr("id"));
+						firstCard = null;
+					}, 1000);
+	              }
+				}
+ });
+ 
+});
+ 
+ 
+</script>
+
+</head>
+<body>
+<br/>
+<h3 id="h3">Click two different cards to see if they match!</h3>
+<br>
+<div align="center">
+<label style="color:#996633;font-size:20px">Number of clicks you did till now:</label> 
+<input id = "numOfClicks" type = "text" id="reset1" label= "numOfClicks" disabled 	value ="0" style="text-align:center" size="10px;"> </input>
+</div>
+<br/>
+<div align="center" id="main">
+<br/><br/>
+<ul id="ul">
+</ul>
+</div>
+<br>
+<div align="center">
+<label style="color:#996633"> <input type="submit" class="btn btn-danger"  value="SCORE"></label> 
+ <input type="submit" id="score" class="btn btn-primary btn-md"  value="0">
+</div>
+<div align="center">
+<input type="submit" class="btn btn-success" onclick="window.location.reload()" value="New Game">
+</div>
+ </body>
+
+</html>
